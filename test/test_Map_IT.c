@@ -217,7 +217,7 @@ void test_mapFind_given_ali_and_ali_is_not_in_the_linkedList_in_the_map_return_N
  *
  *  Ali is in the map.
  *  Find Ali.
- *  Return Ali.
+ *  Remove Ali from the map.
  */
 void test_mapRemove_given_ali_and_ali_is_in_the_map_return_ali_object() {
   Person *person;
@@ -229,14 +229,8 @@ void test_mapRemove_given_ali_and_ali_is_in_the_map_return_ali_object() {
   
   hash_ExpectAndReturn(ali, 3);
 
-  printf("case 1: before\n");
-  listDump(map->bucket[3], personDump);
-  
   person = mapRemove(map, ali, comparePerson, hash);
-  
-  printf("case 1: after\n");
-  listDump(map->bucket[3], personDump);
-  
+
   TEST_ASSERT_NOT_NULL(person);
   TEST_ASSERT_EQUAL_Person(ali, person);
   TEST_ASSERT_NULL(map->bucket[3]);
@@ -247,7 +241,7 @@ void test_mapRemove_given_ali_and_ali_is_in_the_map_return_ali_object() {
  *
  *  Ali is not in the map.
  *  Find Ali.
- *  Return NULL.
+ *  Remove NULL.
  */
 void test_mapRemove_given_ali_and_ali_is_not_in_the_map_return_NULL_since_no_ali_object() {
   Person *person;
@@ -259,15 +253,9 @@ void test_mapRemove_given_ali_and_ali_is_not_in_the_map_return_NULL_since_no_ali
   map->bucket[3] = list;
   
   hash_ExpectAndReturn(ali, 3);
-  
-  printf("case 2: before\n");
-  listDump(map->bucket[3], personDump);
 
   person = mapRemove(map, ali, comparePerson, hash);
-  
-  printf("case 2: after\n");
-  listDump(map->bucket[3], personDump);
-    
+
   TEST_ASSERT_NULL(person);
   TEST_ASSERT_NOT_NULL(map->bucket[3]);
   TEST_ASSERT_EQUAL_Person(abu, getPersonFromBucket(map->bucket[3]));
@@ -278,7 +266,7 @@ void test_mapRemove_given_ali_and_ali_is_not_in_the_map_return_NULL_since_no_ali
  *
  *  The map contains a list: suparman -> zorro -> ali.
  *  Find Ali.
- *  Return Ali.
+ *  Remove Ali from the map.
  */
 void test_mapRemove_given_ali_and_ali_is_the_last_element_of_the_linkedList_in_the_map_return_ali_object() {
   Person *person;
@@ -294,15 +282,9 @@ void test_mapRemove_given_ali_and_ali_is_the_last_element_of_the_linkedList_in_t
   map->bucket[3] = list;
   
   hash_ExpectAndReturn(ali, 3);
-  
-  printf("case 3: before\n");
-  listDump(map->bucket[3], personDump);
 
   person = mapRemove(map, ali, comparePerson, hash);
-  
-  printf("case 3: after\n");
-  listDump(map->bucket[3], personDump);
-  
+
   TEST_ASSERT_NOT_NULL(person);
   TEST_ASSERT_EQUAL_Person(ali, person);
   TEST_ASSERT_NOT_NULL(getPersonFromBucket(map->bucket[3]));
@@ -316,7 +298,7 @@ void test_mapRemove_given_ali_and_ali_is_the_last_element_of_the_linkedList_in_t
  *
  *  The map contains a list: suparman -> ali -> zorro.
  *  Find Ali.
- *  Return Ali.
+ *  Remove Ali from the map.
  */
 void test_mapRemove_given_ali_and_ali_is_the_middle_element_of_the_linkedList_in_the_map_return_ali_object() {
   Person *person;
@@ -332,15 +314,9 @@ void test_mapRemove_given_ali_and_ali_is_the_middle_element_of_the_linkedList_in
   map->bucket[3] = list;
   
   hash_ExpectAndReturn(ali, 3);
-  
-  printf("case 3b: before\n");
-  listDump(map->bucket[3], personDump);
 
   person = mapRemove(map, ali, comparePerson, hash);
-  
-  printf("case 3b: after\n");
-  listDump(map->bucket[3], personDump);
-  
+
   TEST_ASSERT_NOT_NULL(person);
   TEST_ASSERT_EQUAL_Person(ali, person);
   TEST_ASSERT_NOT_NULL(getPersonFromBucket(map->bucket[3]));
@@ -354,7 +330,7 @@ void test_mapRemove_given_ali_and_ali_is_the_middle_element_of_the_linkedList_in
  *
  *  The map contains a list: ali -> suparman -> zorro.
  *  Find Ali.
- *  Return Ali.
+ *  Remove Ali from the map.
  */
 void test_mapRemove_given_ali_and_ali_is_the_first_element_of_the_linkedList_in_the_map_return_ali_object() {
   Person *person;
@@ -370,15 +346,9 @@ void test_mapRemove_given_ali_and_ali_is_the_first_element_of_the_linkedList_in_
   map->bucket[3] = list;
   
   hash_ExpectAndReturn(ali, 3);
-  
-  printf("case 3c: before\n");
-  listDump(map->bucket[3], personDump);
 
   person = mapRemove(map, ali, comparePerson, hash);
-  
-  printf("case 3c: after\n");
-  listDump(map->bucket[3], personDump);
-  
+
   TEST_ASSERT_NOT_NULL(person);
   TEST_ASSERT_EQUAL_Person(ali, person);
   TEST_ASSERT_NOT_NULL(getPersonFromBucket(map->bucket[3]));
@@ -410,14 +380,8 @@ void test_mapRemove_given_ali_and_ali_is_not_in_the_linkedList_in_the_map_return
   
   hash_ExpectAndReturn(ali, 3);
 
-  printf("case 4: before\n");
-  listDump(map->bucket[3], personDump);
-
   person = mapRemove(map, ali, comparePerson, hash);
-  
-  printf("case 4: after\n");
-  listDump(map->bucket[3], personDump);
-  
+
   TEST_ASSERT_NULL(person);
   TEST_ASSERT_NOT_NULL(getPersonFromBucket(map->bucket[3]));
   TEST_ASSERT_EQUAL_Person(suparman, getPersonFromBucket(map->bucket[3]));
@@ -576,7 +540,7 @@ void test_mapLinearStore_given_Along_should_return_an_exception_if_the_bucket_is
 /**
  *  Case 1
  *
- *  Ali is in the map.
+ *  Ali is already placed in the bucket[3].
  *  Find Ali.
  *  Return Ali.
  */
@@ -592,4 +556,301 @@ void test_mapLinearFind_given_ali_and_ali_is_in_the_map_return_ali_object() {
   
   TEST_ASSERT_NOT_NULL(person);
   TEST_ASSERT_EQUAL_Person(ali, person);
+}
+
+/**
+ *  Case 2
+ *
+ *  Ali is not in the map.
+ *  Find Ali.
+ *  Return NULL.
+ */
+void test_mapLinearFind_given_ali_and_ali_is_not_in_the_map_return_NULL_since_no_ali_object() {
+  Person *person;
+  Person *ali = personNew("Ali", 25, 70.3);
+  List *list = listNew(ali, NULL);
+  Map *map = mapNew(5);
+
+  hash_ExpectAndReturn(ali, 3);
+
+  person = mapLinearFind(map, ali, comparePerson, hash);
+  
+  TEST_ASSERT_NULL(person);
+}
+
+/**
+ *  Case 3
+ *
+ *  Suparman is already placed in the bucket[3].
+ *  Zorro is already placed in the bucket[4].
+ *  Ali is already placed in the bucket[5].
+ *  Find Ali.
+ *  Return Ali.
+ */
+void test_mapLinearFind_given_suparman_and_suparman_zorro_ali_is_in_bucket_3_4_5() {
+  Person *person;
+  Person *suparman = personNew("Suparman", 25, 70.3);
+  Person *zorro = personNew("Zorro", 25, 70.3);
+  Person *ali = personNew("Ali", 25, 70.3);
+
+  Map *map = mapNew(6);
+  map->bucket[3] = suparman;
+  map->bucket[4] = zorro;
+  map->bucket[5] = ali;
+  
+  hash_ExpectAndReturn(suparman, 3);
+
+  person = mapLinearFind(map, suparman, comparePerson, hash);
+  
+  TEST_ASSERT_NOT_NULL(person);
+  TEST_ASSERT_EQUAL_Person(suparman, person);
+}
+
+/**
+ *  Case 4
+ *
+ *  bucket[3] is marked.
+ *  bucket[4] is marked.
+ *  Ali is placed in the bucket[5].
+ *  Find Ali.
+ *  Return Ali.
+ */
+void test_mapLinearFind_given_ali_and_bucket_3_and_4_are_marked_and_ali_is_in_bucket_5() {
+  Person *person;
+  Person *ali = personNew("Ali", 25, 70.3);
+
+  Map *map = mapNew(6);
+  map->bucket[3] = (void *) -1;
+  map->bucket[4] = (void *) -1;
+  map->bucket[5] = ali;
+  
+  hash_ExpectAndReturn(ali, 3);
+
+  person = mapLinearFind(map, ali, comparePerson, hash);
+  
+  TEST_ASSERT_NOT_NULL(person);
+  TEST_ASSERT_EQUAL_Person(ali, person);
+}
+
+/////////////////////////////
+// mapLinearRemove
+/////////////////////////////
+/**
+ *  Case 1
+ *
+ *  Ali is in the map.
+ *  Find Ali.
+ *  Remove Ali from the map.
+ */
+void test_mapLinearRemove_given_ali_and_ali_is_in_the_map_return_ali_object() {
+  Person *person;
+  Person *ali = personNew("Ali", 25, 70.3);
+  Map *map = mapNew(5);
+  
+  map->bucket[3] = ali;
+  
+  hash_ExpectAndReturn(ali, 3);
+
+  person = mapLinearRemove(map, ali, comparePerson, hash);
+
+  TEST_ASSERT_NOT_NULL(person);
+  TEST_ASSERT_EQUAL_Person(ali, person);
+  TEST_ASSERT_NULL(map->bucket[3]);
+}
+
+/**
+ *  Case 2
+ *
+ *  Ali is not in the map.
+ *  Find Ali.
+ *  Remove NULL.
+ */
+void test_mapLinearRemove_given_ali_and_ali_is_not_in_the_map_return_NULL_since_no_ali_object() {
+  Person *person;
+  Person *ali = personNew("Ali", 25, 70.3);
+  Person *abu = personNew("Abu", 25, 70.3);
+
+  Map *map = mapNew(5);
+  map->bucket[3] = abu;
+  
+  hash_ExpectAndReturn(ali, 3);
+
+  person = mapLinearRemove(map, ali, comparePerson, hash);
+
+  TEST_ASSERT_NULL(person);
+  TEST_ASSERT_NOT_NULL(map->bucket[3]);
+  TEST_ASSERT_EQUAL_Person(abu, map->bucket[3]);
+}
+
+/**
+ *  Case 3
+ *
+ *  Suparman is already placed in the bucket[3].
+ *  Zorro is already placed in the bucket[4].
+ *  Ali is already placed in the bucket[5].
+ *  Find Ali.
+ *  Remove Ali.
+ */
+void test_mapLinearRemove_given_ali_and_suparman_zorro_ali_is_in_bucket_3_4_5_remove_ali() {
+  Person *person;
+  Person *suparman = personNew("Suparman", 25, 70.3);
+  Person *zorro = personNew("Zorro", 25, 70.3);
+  Person *ali = personNew("Ali", 25, 70.3);
+
+  Map *map = mapNew(6);
+  map->bucket[3] = suparman;
+  map->bucket[4] = zorro;
+  map->bucket[5] = ali;
+  
+  hash_ExpectAndReturn(ali, 3);
+
+  person = mapLinearRemove(map, ali, comparePerson, hash);
+  
+  TEST_ASSERT_NOT_NULL(person);
+  TEST_ASSERT_NULL(map->bucket[5]);
+  TEST_ASSERT_EQUAL_Person(ali, person);
+}
+
+/**
+ *  Case 4
+ *
+ *  Suparman is already placed in the bucket[3].
+ *  Zorro is already placed in the bucket[4].
+ *  Ali is already placed in the bucket[5].
+ *  Find Zorro.
+ *  Remove Zorro and replace with -1.
+ */
+void test_mapLinearRemove_given_zorro_and_suparman_zorro_ali_is_in_bucket_3_4_5_should_remove_zorro_and_replace_with_neg1() {
+  Person *person;
+  Person *suparman = personNew("Suparman", 25, 70.3);
+  Person *zorro = personNew("Zorro", 25, 70.3);
+  Person *ali = personNew("Ali", 25, 70.3);
+
+  Map *map = mapNew(6);
+  map->bucket[3] = suparman;
+  map->bucket[4] = zorro;
+  map->bucket[5] = ali;
+  
+  hash_ExpectAndReturn(zorro, 3);
+  hash_ExpectAndReturn(ali, 3);
+
+  person = mapLinearRemove(map, zorro, comparePerson, hash);
+
+  TEST_ASSERT_NOT_NULL(person);
+  TEST_ASSERT_NOT_NULL(map->bucket[4]);
+  TEST_ASSERT_EQUAL_Person(zorro, person);
+  TEST_ASSERT_EQUAL(1, isBucketMarked(map->bucket[4]));
+}
+
+/**
+ *  Case 5
+ *
+ *  Suparman is already placed in the bucket[3].
+ *  Zorro is already placed in the bucket[4].
+ *  Ali is already placed in the bucket[5].
+ *  Find Suparman.
+ *  Remove Suparman and replace with -1.
+ */
+void test_mapLinearRemove_given_suparman_and_suparman_zorro_ali_is_in_bucket_3_4_5_should_remove_suparman_and_replace_with_neg1() {
+  Person *person;
+  Person *suparman = personNew("Suparman", 25, 70.3);
+  Person *zorro = personNew("Zorro", 25, 70.3);
+  Person *ali = personNew("Ali", 25, 70.3);
+
+  Map *map = mapNew(6);
+  map->bucket[3] = suparman;
+  map->bucket[4] = zorro;
+  map->bucket[5] = ali;
+  
+  hash_ExpectAndReturn(suparman, 3);
+  hash_ExpectAndReturn(zorro, 3);
+
+  person = mapLinearRemove(map, suparman, comparePerson, hash);
+  
+  TEST_ASSERT_NOT_NULL(person);
+  TEST_ASSERT_NOT_NULL(map->bucket[3]);
+  TEST_ASSERT_EQUAL_Person(suparman, person);
+  TEST_ASSERT_EQUAL(1, isBucketMarked(map->bucket[3]));
+}
+
+/**
+ *  Case 6
+ *
+ *  -1 is already placed in the bucket[3].
+ *  Zorro is already placed in the bucket[4].
+ *  Ali is already placed in the bucket[5].
+ *  Find Suparman.
+ *  Return null.
+ */
+void test_mapLinearRemove_given_suparman_and_neg1_zorro_ali_is_in_bucket_3_4_5_should_return_null() {
+  Person *person;
+  Person *suparman = personNew("Suparman", 25, 70.3);
+  Person *zorro = personNew("Zorro", 25, 70.3);
+  Person *ali = personNew("Ali", 25, 70.3);
+
+  Map *map = mapNew(6);
+  map->bucket[3] = (void *) -1;
+  map->bucket[4] = zorro;
+  map->bucket[5] = ali;
+  
+  hash_ExpectAndReturn(suparman, 3);
+  
+  person = mapLinearRemove(map, suparman, comparePerson, hash);
+  
+  TEST_ASSERT_NULL(person);
+}
+
+/**
+ *  Case 7
+ *
+ *  -1 is already placed in the bucket[3].
+ *  Zorro is already placed in the bucket[4].
+ *  Ali is already placed in the bucket[5].
+ *  Find Ali.
+ *  Remove Ali and replace with -1.
+ */
+void test_mapLinearRemove_given_ali_and_neg1_zorro_ali_is_in_bucket_3_4_5_should_remove_ali() {
+  Person *person;
+  Person *suparman = personNew("Suparman", 25, 70.3);
+  Person *zorro = personNew("Zorro", 25, 70.3);
+  Person *ali = personNew("Ali", 25, 70.3);
+
+  Map *map = mapNew(6);
+  map->bucket[3] = (void *) -1;
+  map->bucket[4] = zorro;
+  map->bucket[5] = ali;
+  
+  hash_ExpectAndReturn(ali, 3);
+  
+  person = mapLinearRemove(map, ali, comparePerson, hash);
+  
+  TEST_ASSERT_NOT_NULL(person);
+  TEST_ASSERT_EQUAL_Person(ali, person);
+  TEST_ASSERT_NULL(map->bucket[5]);
+}
+
+/**
+ *  Case 8
+ *
+ *  -1 is already placed in the bucket[3].
+ *  Ali is already placed in the bucket[4].
+ *  Find Ali.
+ *  Remove Ali and replace with -1.
+ */
+void test_mapLinearRemove_given_ali_and_neg1_ali_is_in_bucket_3_4_should_remove_ali_and_make_bucket_3_and_4_to_null() {
+  Person *person;
+  Person *ali = personNew("Ali", 25, 70.3);
+
+  Map *map = mapNew(6);
+  map->bucket[3] = (void *) -1;
+  map->bucket[4] = ali;
+  
+  hash_ExpectAndReturn(ali, 3);
+  printf("this");
+  person = mapLinearRemove(map, ali, comparePerson, hash);
+  
+  TEST_ASSERT_NOT_NULL(person);
+  TEST_ASSERT_EQUAL_Person(ali, person);
+  TEST_ASSERT_NULL(map->bucket[3]);
+  TEST_ASSERT_NULL(map->bucket[4]);
 }

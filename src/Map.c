@@ -82,8 +82,7 @@ void *mapRemove(Map *map,
           temp->next = temp->next->next;
         else
           temp->next = NULL;
-        
-          printf("temp: ");
+
           listDump(temp, personDump);
           
         return removedElement;
@@ -103,7 +102,7 @@ void mapLinearStore(Map *map,
 
   int index = hash(element);
 
-  if(map->bucket[index] == NULL) {
+  if(isBucketEmpty(map->bucket[index])) {
     map->bucket[index] = element;
   } else {
       while(map->bucket[index] != NULL) {
@@ -128,13 +127,59 @@ void *mapLinearFind(Map *map,
   if(map->bucket[index] == NULL) {
     return NULL;
   } else {
-    while(map->bucket[index] != NULL) {
-      if(isBucketMarked(map->bucket[index]))
+    while(map->bucket[index] != NULL && index < map->length) {
+      if(isBucketMarked(map->bucket[index])) {
         index++;
-      else if (compare(map->bucket[index], element) == 1) // compare(in-map, element)
-        return map->bucket;
+      } else if (compare(map->bucket[index], element) == 1) { // compare(in-map, element)
+        return map->bucket[index];
+      } else
+        return NULL;
     }
     return NULL;
   }
+}
 
+void *mapLinearRemove(Map *map,
+                void *element,
+                int (*compare)(void *, void *),
+                unsigned int (*hash)(void *)) {
+
+  int index = hash(element);
+  int hashNumber = index;
+  void *removedElement;
+  printf("index: %d\n", index);
+  if(map->bucket[index] == NULL) {
+    return NULL;
+  } else {
+    while(map->bucket[index] != NULL && index < map->length) {
+      if(!isBucketMarked(map->bucket[index])) {
+        if(compare(map->bucket[index], element) == 1) { // compare(in-map, element)
+          removedElement = map->bucket[index];
+          
+          if(index+1 < map->length) {
+            if(map->bucket[index+1] == NULL) { // next is null
+              map->bucket[index] = NULL;
+              while(isBucketMarked(map->bucket[index-1])) {  // check previous if marked
+                printf("came here?");
+                map->bucket[--index] = NULL;
+              }
+              printf("index: %d\n", index);
+            } else {
+              if(hashNumber == hash(map->bucket[index+1])) {  // check the next hash number
+                map->bucket[index] = (void *) -1;
+              } else {                                        // check the next hash number
+                map->bucket[index] = NULL;
+              }
+            }
+          } else {
+              map->bucket[index] = NULL;
+          }
+            
+          return removedElement;
+        }
+      }
+      index++;
+    }
+    return NULL;
+  }
 }

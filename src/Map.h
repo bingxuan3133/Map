@@ -41,5 +41,9 @@ void *mapLinearFind(Map *map,
               int (*compare)(void *, void *),
               unsigned int (*hash)(void *));
               
-
+void *mapLinearRemove(Map *map,
+                void *element,
+                int (*compare)(void *, void *),
+                unsigned int (*hash)(void *));
+                
 #endif // Map_H
