@@ -106,8 +106,7 @@ void test_mapStore_given_Zorro_should_add_into_the_head_when_there_is_already_an
 		mapStore(map, person2, comparePerson, hash);
     TEST_ASSERT_NOT_NULL(map->bucket[3]);
     TEST_ASSERT_EQUAL_Person(person2, getPersonFromBucket(map->bucket[3]));
-    TEST_ASSERT_EQUAL_Person(person1, getPersonFromBucket(( (List *) map->bucket[3] )->next) );	
-    listDump(map->bucket[3], personDump);
+    TEST_ASSERT_EQUAL_Person(person1, getPersonFromBucket(( (List *) map->bucket[3] )->next) );
 	}
 	Catch(e){
     TEST_FAIL_MESSAGE("Expect not to throw exception but thrown.");

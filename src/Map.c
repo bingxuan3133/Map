@@ -33,9 +33,9 @@ void mapStore(Map *map,
 }
 
 void *mapFind(Map *map,
-             void *element,
-             int (*compare)(void *, void *),
-             unsigned int (*hash)(void *)) {
+              void *element,
+              int (*compare)(void *, void *),
+              unsigned int (*hash)(void *)) {
   
   int index = hash(element);
   List *temp = (List *)map->bucket[index];
@@ -52,9 +52,44 @@ void *mapFind(Map *map,
     return NULL;
   }
   
+}
 
+void *mapRemove(Map *map,
+                void *element,
+                int (*compare)(void *, void *),
+                unsigned int (*hash)(void *)) {
   
-  
-  
+  int index = hash(element);
+  List *temp = (List *)map->bucket[index];
+  void *removedElement;
+
+  if(((List *)map->bucket[index]) == NULL) {
+    return NULL;
+  } else if (compare(temp->data, element) == 1) { // the first attempt: compare(in-map, element)
+    removedElement = temp->data;
+    if(temp->next != NULL)
+      map->bucket[index] = temp->next;
+    else
+      map->bucket[index] = NULL;
+    return removedElement;
+    
+  } else {
+    while((temp->next) != NULL) { // the second or more attempts: go thru linkedlist and find element
+      if(compare(temp->next->data, element) == 1) {
+        removedElement = temp->next->data;
+        if(temp->next->next != NULL)
+          temp->next = temp->next->next;
+        else
+          temp->next = NULL;
+        
+          printf("temp: ");
+          listDump(temp, personDump);
+          
+        return removedElement;
+      }
+      temp = temp->next;
+    }
+    return NULL;
+  }
   
 }
