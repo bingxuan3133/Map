@@ -14,10 +14,13 @@ Map *mapNew(int length) {
   return map;
 }
 
+
+// Implementing Separate Chaining Method
+
 void mapStore(Map *map,
               void *element,
               int (*compare)(void *, void *),
-              unsigned int (*hash)(void *)){
+              unsigned int (*hash)(void *)) {
 
   int index = hash(element);
   List *list = listNew(element, NULL);
@@ -29,7 +32,6 @@ void mapStore(Map *map,
   } else {
     map->bucket[index] = listAdd(element, map->bucket[index]); // chaining
   }
-
 }
 
 void *mapFind(Map *map,
@@ -51,7 +53,6 @@ void *mapFind(Map *map,
     }
     return NULL;
   }
-  
 }
 
 void *mapRemove(Map *map,
@@ -91,5 +92,49 @@ void *mapRemove(Map *map,
     }
     return NULL;
   }
-  
+}
+
+// Implementing Linear Probing Method
+
+void mapLinearStore(Map *map,
+              void *element,
+              int (*compare)(void *, void *),
+              unsigned int (*hash)(void *)) {
+
+  int index = hash(element);
+
+  if(map->bucket[index] == NULL) {
+    map->bucket[index] = element;
+  } else {
+      while(map->bucket[index] != NULL) {
+        if(index == map->length)
+          Throw(ERR_BUCKET_FULL);
+        if (compare(map->bucket[index], element) == 1) { // compare(in-map, element)
+          Throw(ERR_SAME_ELEMENT);
+        }
+        index++;
+      }
+      map->bucket[index] = element;
+  }
+}
+
+void *mapLinearFind(Map *map,
+              void *element,
+              int (*compare)(void *, void *),
+              unsigned int (*hash)(void *)) {
+
+  int index = hash(element);
+
+  if(map->bucket[index] == NULL) {
+    return NULL;
+  } else {
+    while(map->bucket[index] != NULL) {
+      if(isBucketMarked(map->bucket[index]))
+        index++;
+      else if (compare(map->bucket[index], element) == 1) // compare(in-map, element)
+        return map->bucket;
+    }
+    return NULL;
+  }
+
 }

@@ -427,3 +427,169 @@ void test_mapRemove_given_ali_and_ali_is_not_in_the_linkedList_in_the_map_return
   TEST_ASSERT_EQUAL_Person(abu, getPersonFromBucket(((List *)map->bucket[3])->next->next));
 }
 
+/////////////////////////////
+// mapLinearStore
+/////////////////////////////
+/**
+ *  Case 1
+ *
+ *  Add Ali into an empty map. Ali is first hashed and hash value 3 is obtained.
+ *  Ali is then placed into bucket 3.
+ */
+void test_mapLinearStore_given_Ali_should_add_it_to_map(void) {
+  Person *person = personNew("Ali", 25, 70.3);
+  Map *map = mapNew(5);
+
+  hash_ExpectAndReturn(person, 3);
+  
+  mapLinearStore(map, person, comparePerson, hash);
+
+  TEST_ASSERT_NOT_NULL(map->bucket[3]);
+  TEST_ASSERT_NOT_NULL((Person *)map->bucket[3]);
+  
+  TEST_ASSERT_EQUAL_Person(person, map->bucket[3]);
+}
+
+/**
+ *  Case 2
+ *
+ *  Add Ali into a map. Ali is first hashed and hash value 3 is obtained.
+ *  But there is already a person called "Ali".
+ */
+void test_mapLinearStore_given_Ali_should_throw_exception_when_there_is_already_an_Ali_stored() {
+  CEXCEPTION_T e;
+  Person *ali = personNew("Ali", 25, 70.3);
+  
+  Map *map = mapNew(5);
+  map->bucket[3] = ali;
+  
+  hash_ExpectAndReturn(ali, 3);
+	
+	Try{
+		mapLinearStore(map, ali, comparePerson, hash);
+		TEST_FAIL_MESSAGE("Expect throw exception but did not.");
+	}
+	Catch(e){
+    TEST_ASSERT_EQUAL(ERR_SAME_ELEMENT, e);
+    TEST_ASSERT_NOT_NULL(map->bucket[3]);
+    TEST_ASSERT_EQUAL_Person(ali, map->bucket[3]);
+	}
+}
+
+/**
+ *  Case 3
+ *
+ *  Add Abu into a map. Abu is first hashed and hash value 3 is obtained.
+ *  Ali is already placed in the bucket[3].
+ *  Abu will then be added to the head of the bucket[4].
+ */
+void test_mapLinearStore_given_Abu_should_add_into_the_next_bucket_when_there_is_already_an_Ali_stored() {
+  CEXCEPTION_T e;
+  Person *ali = personNew("Ali", 25, 70.3);
+  Person *abu = personNew("Abu", 60, 70.3);
+
+  Map *map = mapNew(5);
+  map->bucket[3] = ali;
+  
+  hash_ExpectAndReturn(abu, 3);
+	
+	Try{
+		mapLinearStore(map, abu, comparePerson, hash);
+    TEST_ASSERT_NOT_NULL(map->bucket[3]);
+    TEST_ASSERT_NOT_NULL(map->bucket[4]);
+    TEST_ASSERT_EQUAL_Person(ali, map->bucket[3]);
+    TEST_ASSERT_EQUAL_Person(abu, map->bucket[4]);
+	}
+	Catch(e){
+    TEST_FAIL_MESSAGE("Expect not to throw exception but thrown.");
+	}
+}
+
+/**
+ *  Case 4
+ *
+ *  Add Alice into a map. Alice is first hashed and hash value 3 is obtained.
+ *  Ali & Abu is already placed in the bucket[3] & [4].
+ *  Alice will then be added to the bucket[5].
+ */
+void test_mapLinearStore_given_Alice_should_add_into_the_next_next_bucket_when_there_are_already_Ali_and_Abu_stored() {
+  CEXCEPTION_T e;
+  Person *ali = personNew("Ali", 25, 70.3);
+  Person *abu = personNew("Abu", 60, 70.3);
+  Person *alice = personNew("Alice", 18, 40.0);
+
+  Map *map = mapNew(6);
+  map->bucket[3] = ali;
+  map->bucket[4] = abu;
+  
+  hash_ExpectAndReturn(alice, 3);
+	
+	Try{
+		mapLinearStore(map, alice, comparePerson, hash);
+    TEST_ASSERT_NOT_NULL(map->bucket[3]);
+    TEST_ASSERT_NOT_NULL(map->bucket[4]);
+    TEST_ASSERT_NOT_NULL(map->bucket[5]);
+    TEST_ASSERT_EQUAL_Person(ali, map->bucket[3]);
+    TEST_ASSERT_EQUAL_Person(abu, map->bucket[4]);
+    TEST_ASSERT_EQUAL_Person(alice, map->bucket[5]);
+	}
+	Catch(e){
+    TEST_FAIL_MESSAGE("Expect not to throw exception but thrown.");
+	}
+}
+
+/**
+ *  Case 5
+ *
+ *  Add Along into a map. Abu is first hashed and hash value 3 is obtained.
+ *  Ali is already placed in the bucket[3].
+ *  Abu is already placed in the bucket[4].
+ *  Alice is already placed in the bucket[5].
+ *  Along have no space to be placed. Thus, throw error ERR_BUCKET_FULL.
+ */
+void test_mapLinearStore_given_Along_should_return_an_exception_if_the_bucket_is_full() {
+  CEXCEPTION_T e;
+  Person *ali = personNew("Ali", 25, 70.3);
+  Person *abu = personNew("Abu", 60, 70.3);
+  Person *alice = personNew("Alice", 18, 40.0);
+  Person *along = personNew("Along", 30, 65.0);
+
+  Map *map = mapNew(6);
+  map->bucket[3] = ali;
+  map->bucket[4] = abu;
+  map->bucket[5] = alice;
+  
+  hash_ExpectAndReturn(along, 3);
+	
+	Try{
+		mapLinearStore(map, along, comparePerson, hash);
+    TEST_FAIL_MESSAGE("Expect throw exception but no error been not thrown");
+	}
+	Catch(e){
+    TEST_ASSERT_EQUAL(e, ERR_BUCKET_FULL);
+	}
+}
+
+/////////////////////////////
+// mapLinearFind
+/////////////////////////////
+/**
+ *  Case 1
+ *
+ *  Ali is in the map.
+ *  Find Ali.
+ *  Return Ali.
+ */
+void test_mapLinearFind_given_ali_and_ali_is_in_the_map_return_ali_object() {
+  Person *person;
+  Person *ali = personNew("Ali", 25, 70.3);
+  Map *map = mapNew(5);
+  map->bucket[3] = ali;
+  
+  hash_ExpectAndReturn(ali, 3);
+  
+  person = mapLinearFind(map, ali, comparePerson, hash);
+  
+  TEST_ASSERT_NOT_NULL(person);
+  TEST_ASSERT_EQUAL_Person(ali, person);
+}
