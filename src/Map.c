@@ -23,11 +23,11 @@ void mapStore(Map *map,
   List *list = listNew(element, NULL);
 
   if(((List *)map->bucket[index]) == NULL) {
-      map->bucket[index] = (void *) list;
-  } else if (compare( ((List *)map->bucket[index])->data , element) == 1) {
+    map->bucket[index] = (void *) list;
+  } else if (compare(((List *)map->bucket[index])->data , element) == 1) { // compare(in-map, element)
     Throw(ERR_SAME_ELEMENT);
   } else {
-    ; // chaining
+    map->bucket[index] = listAdd(element, map->bucket[index]); // chaining
   }
 
 }
@@ -36,5 +36,25 @@ void *mapFind(Map *map,
              void *element,
              int (*compare)(void *, void *),
              unsigned int (*hash)(void *)) {
-        
+  
+  int index = hash(element);
+  List *temp = (List *)map->bucket[index];
+  
+  if(((List *)map->bucket[index]) == NULL) {
+    return NULL;
+  } else if (compare(temp->data , element) == 1) { // the first attempt: compare(in-map, element)
+    return temp->data;
+  } else {
+    while((temp = temp->next) != NULL) { // the second or more attempts: go thru linkedlist and find element
+      if(compare(temp->data, element) == 1)
+        return temp->data;
+    }
+    return NULL;
+  }
+  
+
+  
+  
+  
+  
 }
